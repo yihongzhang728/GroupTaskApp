@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    tools:showIn="navigation_view">
+
+    <group android:checkableBehavior="single">
+        <item
+            android:id="@+id/alltasks"
+            android:icon="@drawable/ic_people_black_24dp"
+            android:title="@string/menu_alltasks" />
+        <item
+            android:id="@+id/mytasks"
+            android:icon="@drawable/ic_person_outline_black_24dp"
+            android:title="@string/menu_mytasks" />
+        <item
+            android:id="@+id/addtasks"
+            android:icon="@drawable/ic_add_black_24dp"
+            android:title="@string/menu_addtasks" />
+
+    </group>
+</menu>
