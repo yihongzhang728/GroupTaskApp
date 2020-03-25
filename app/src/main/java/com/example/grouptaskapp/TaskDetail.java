@@ -30,6 +30,8 @@ public class TaskDetail extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_detail);
 
+        getSupportActionBar().setTitle("Add Task");
+
         et_name = (EditText) findViewById(R.id.name_text);
         et_deadline = (EditText) findViewById(R.id.deadline_text);
         et_assignee = (EditText) findViewById(R.id.assignee_text);

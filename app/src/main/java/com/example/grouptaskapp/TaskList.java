@@ -3,13 +3,12 @@ package com.example.grouptaskapp;
 import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
-import android.view.ContextMenu;
 import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
-import android.widget.Toast;
+
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -24,6 +23,7 @@ public class TaskList extends AppCompatActivity {
 
     public static final int EDIT_TASK = 0;
     public static final int NEW_TASK = 1;
+    public static final int VIEW_TASK = 1;
 
     public static final int MENU_ITEM_EDITVIEW = Menu.FIRST;
     public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
@@ -45,6 +45,8 @@ public class TaskList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
 
+        getSupportActionBar().setTitle("All Tasks");
+
         taskList = (ListView) findViewById(R.id.tasklist);
         // create ArrayList of courses from database
         taskItems = new ArrayList<TaskItem>();
@@ -59,8 +61,7 @@ public class TaskList extends AppCompatActivity {
         // program a short click on the list item
         taskList.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             public void onItemClick(AdapterView<?> parent, View view, int position, long id) {
-                Snackbar.make(view, "Selected #" + id, Snackbar.LENGTH_SHORT)
-                        .setAction("Action", null).show();
+                launchViewTask(id);
             }
         });
 
@@ -74,16 +75,23 @@ public class TaskList extends AppCompatActivity {
 
     }
 
+
     private void launchNewTask() {
         Intent intentA = new Intent(TaskList.this, TaskDetail.class);
         intentA.putExtra("taskEDIT", false);
         startActivityForResult(intentA, NEW_TASK);
     }
 
+    private void launchViewTask (long id) {
+        Intent intentB = new Intent(TaskList.this, ViewTask.class);
+        intentB.putExtra("ID", id);
+        startActivityForResult(intentB, VIEW_TASK);
+    }
+
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         if (resultCode == RESULT_OK && (requestCode == TaskList.EDIT_TASK
-                || requestCode == TaskList.NEW_TASK)) {
+                || requestCode == TaskList.NEW_TASK || requestCode == TaskList.VIEW_TASK)) {
             aa.notifyDataSetChanged();
         }
         // if resultCode == RESULT_CANCELED no need to update display
