@@ -3,26 +3,29 @@
     package="com.example.grouptaskapp">
 
     <application
+        android:name=".MyApplication"
         android:allowBackup="true"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".ViewTask"
-            android:parentActivityName=".TaskList">
-        </activity>
-
-        <activity android:name=".TaskList"
-            android:launchMode="singleTask">
+        <activity android:name=".MyTasks"></activity>
+        <activity android:name=".SettingsActivity2" />
+        <activity
+            android:name=".ViewTask"
+            android:parentActivityName=".TaskList" />
+        <activity
+            android:name=".TaskList"
+            android:launchMode="singleTask"
+            android:theme="@style/AppTheme.NoActionBar">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
+
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
-
         <activity android:name=".TaskDetail" />
-
     </application>
 
 </manifest>

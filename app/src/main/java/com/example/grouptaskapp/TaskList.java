@@ -8,28 +8,38 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ListView;
+import android.widget.TextView;
 
 
+import androidx.annotation.NonNull;
+import androidx.appcompat.app.ActionBarDrawerToggle;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.appcompat.widget.Toolbar;
+import androidx.core.view.GravityCompat;
+import androidx.drawerlayout.widget.DrawerLayout;
 
 import com.google.android.material.floatingactionbutton.FloatingActionButton;
+import com.google.android.material.navigation.NavigationView;
 import com.google.android.material.snackbar.Snackbar;
 
 import java.util.ArrayList;
 
-
-public class TaskList extends AppCompatActivity {
+public class TaskList extends AppCompatActivity implements NavigationView.OnNavigationItemSelectedListener {
 
 
     public static final int EDIT_TASK = 0;
     public static final int NEW_TASK = 1;
     public static final int VIEW_TASK = 1;
 
+    public static String username;
+
     public static final int MENU_ITEM_EDITVIEW = Menu.FIRST;
     public static final int MENU_ITEM_DELETE = Menu.FIRST + 1;
 
     private ListView taskList;
     private TaskItemAdapter aa;
+
+    private DrawerLayout drawer;
 
     // this is temporarily set up with package and static access so
     // that job detail can access items --
@@ -45,7 +55,7 @@ public class TaskList extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
 
-        getSupportActionBar().setTitle("All Tasks");
+        //getSupportActionBar().setTitle("All Tasks");
 
         taskList = (ListView) findViewById(R.id.tasklist);
         // create ArrayList of courses from database
@@ -73,8 +83,77 @@ public class TaskList extends AppCompatActivity {
             }
         });
 
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////
+        Toolbar toolbar = findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle("All Tasks");
+
+
+        drawer = findViewById(R.id.drawer_layout);
+        ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(this, drawer, toolbar,
+                R.string.navigation_drawer_open, R.string.navigation_drawer_close);
+        drawer.addDrawerListener(toggle);
+        toggle.syncState();
+        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                new allFragment()).commit();
+
+        NavigationView navigationView = findViewById(R.id.nav_view);
+        navigationView.setNavigationItemSelectedListener(this);
+         if(savedInstanceState == null) {
+             ((MyApplication) this.getApplication()).setUsername("User (Set name in settings)");
+            getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                    new allFragment()).commit();
+            navigationView.setCheckedItem(R.id.nav_allTasks);
+        }
+
+         NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
+         View headerView = navView.getHeaderView(0);
+        TextView name = (TextView) headerView.findViewById(R.id.welcome);
+        name.setText("Welcome " + ((MyApplication) this.getApplication()).getUsername());
     }
 
+    @Override
+    public boolean onNavigationItemSelected(@NonNull MenuItem item) {
+        switch (item.getItemId()){
+            case R.id.nav_allTasks:
+                Intent intentC = new Intent(TaskList.this, TaskList.class);
+                startActivity(intentC);
+                getSupportActionBar().setTitle("All Tasks");
+                break;
+            case R.id.nav_myTasks:
+                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
+                        new myFragment()).commit();
+                getSupportActionBar().setTitle("My Tasks");
+                break;
+            case R.id.nav_addTask:
+                launchNewTask();
+                getSupportActionBar().setTitle("Add Task");
+                break;
+        }
+        drawer.closeDrawer(GravityCompat.START);
+        NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
+        View headerView = navView.getHeaderView(0);
+        TextView name = (TextView) headerView.findViewById(R.id.welcome);
+        name.setText("Welcome " + ((MyApplication) this.getApplication()).getUsername());
+        return true;
+    }
+
+    @Override
+    public void onBackPressed(){
+        if (drawer.isDrawerOpen(GravityCompat.START)){
+            NavigationView navView = (NavigationView) findViewById(R.id.nav_view);
+            View headerView = navView.getHeaderView(0);
+            TextView name = (TextView) headerView.findViewById(R.id.welcome);
+            name.setText("Welcome " + ((MyApplication) this.getApplication()).getUsername());
+            drawer.closeDrawer(GravityCompat.START);
+        }
+        else {
+            super.onBackPressed();
+        }
+    }
+////////////////////////////////////////////////////////////////////////////////////////////////////
 
     private void launchNewTask() {
         Intent intentA = new Intent(TaskList.this, TaskDetail.class);
@@ -114,12 +193,11 @@ public class TaskList extends AppCompatActivity {
 
         // not implemented
         if (id == R.id.menu_settings) {
+            startActivity(new Intent(this, SettingsActivity2.class));
             return true;
         }
 
         return super.onOptionsItemSelected(item);
     }
-
-
 
 }
