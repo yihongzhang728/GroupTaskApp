@@ -55,8 +55,6 @@ public class TaskList extends AppCompatActivity implements NavigationView.OnNavi
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_task_list);
 
-        //getSupportActionBar().setTitle("All Tasks");
-
         taskList = (ListView) findViewById(R.id.tasklist);
         // create ArrayList of courses from database
         taskItems = new ArrayList<TaskItem>();
@@ -96,8 +94,6 @@ public class TaskList extends AppCompatActivity implements NavigationView.OnNavi
                 R.string.navigation_drawer_open, R.string.navigation_drawer_close);
         drawer.addDrawerListener(toggle);
         toggle.syncState();
-        getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                new allFragment()).commit();
 
         NavigationView navigationView = findViewById(R.id.nav_view);
         navigationView.setNavigationItemSelectedListener(this);
@@ -118,13 +114,11 @@ public class TaskList extends AppCompatActivity implements NavigationView.OnNavi
     public boolean onNavigationItemSelected(@NonNull MenuItem item) {
         switch (item.getItemId()){
             case R.id.nav_allTasks:
-                Intent intentC = new Intent(TaskList.this, TaskList.class);
-                startActivity(intentC);
                 getSupportActionBar().setTitle("All Tasks");
                 break;
             case R.id.nav_myTasks:
-                getSupportFragmentManager().beginTransaction().replace(R.id.fragment_container,
-                        new myFragment()).commit();
+                Intent intentM = new Intent(TaskList.this, MyTasks.class);
+                startActivity(intentM);
                 getSupportActionBar().setTitle("My Tasks");
                 break;
             case R.id.nav_addTask:
